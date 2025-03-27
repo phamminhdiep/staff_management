@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Welcome to Staff Management App</title>
+    </head>
+    <body>
+        <img src="https://media.istockphoto.com/id/1777656344/vi/vec-to/bong-b%C3%B3ng-l%E1%BB%9Di-tho%E1%BA%A1i-v%E1%BB%9Bi-t%E1%BB%AB-ch%C3%A0o-m%E1%BB%ABng-b%E1%BA%A1n-%C4%91%E1%BA%BFn-v%E1%BB%9Bi-nh%C3%A3n-m%C3%A0u-xanh-lam-c%E1%BB%A7a-%C4%91%E1%BB%99i-vector-h%C3%ACnh-minh.jpg?s=1024x1024&w=is&k=20&c=G80oG-8s2n5nQ0AW66rpKuW2dm113r7akG9cdkmx-lE=">
+        <h2>Hello, <span th:text="${name}"></span></h2>
+        <p>Your account's default password is 12345678</p>
+        <p>Your checkin code is: <span th:text="${checkinCode}"></span> Please do not share your code to anyone</p>
+        <p>Thank you!</p>
+    </body>
+</html>
