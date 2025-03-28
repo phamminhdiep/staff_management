@@ -1,4 +1,4 @@
-package com.example.staff_management;
+package com.example.staff_management.service;
 
 import com.example.staff_management.dto.StaffDto;
 import com.example.staff_management.entities.Staff;
@@ -15,35 +15,21 @@ import com.example.staff_management.example.profile_configuration.LocalProfileBe
 import com.example.staff_management.repository.StaffRepository;
 import com.example.staff_management.repository.projection.StaffCheckinProjection;
 import com.example.staff_management.repository.projection.StaffProjection;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 @Slf4j
-@SpringBootApplication
-public class StaffManagementApplication {
+public class ExampleService {
 
-    public static void main(String[] args) {
-        ApplicationContext context = SpringApplication.run(StaffManagementApplication.class, args);
-//        beanAndComponentExample(context);
-//        profileAndConfigExample(context);
-//        DIExample(context);
-//        beanScopeExample(context);
-//        lazyEagerExample(context);
-//        cascadeExample(context);
-//        mapperExample(context);
-//        nativeQueryExample(context);
-//        JPQLExample(context);
-//        CustomQueryWithContructorExample(context);
-//        ProjectionExample(context);
-//       JointableExample(context);
+    private final ApplicationContext context;
 
-    }
-
-    static void beanAndComponentExample(ApplicationContext context) {
+    public void beanAndComponentExample() {
         SpringBean bean = context.getBean(SpringBean.class);
         bean.print();
 
@@ -51,7 +37,7 @@ public class StaffManagementApplication {
         component.print();
     }
 
-    static void profileAndConfigExample(ApplicationContext context) {
+    public void profileAndConfigExample() {
         DevProfileBean profileBean = context.getBean("devProfileBean", DevProfileBean.class);
         profileBean.print();
 
@@ -59,12 +45,12 @@ public class StaffManagementApplication {
         localProfileBean.print();
     }
 
-    static void DIExample(ApplicationContext context) {
+    public void DIExample() {
         ExampleBean exampleBean = context.getBean(ExampleBean.class);
         exampleBean.print();
     }
 
-    static void beanScopeExample(ApplicationContext context) {
+    public void beanScopeExample() {
         SingletonBean bean = context.getBean(SingletonBean.class);
         SingletonBean bean2 = context.getBean(SingletonBean.class);
         System.out.println("Same Singleton Bean: " + (bean == bean2));
@@ -74,18 +60,18 @@ public class StaffManagementApplication {
         System.out.println("Same Prototype Bean: " + (prototypeBean == prototypeBean2));
     }
 
-    static void lazyEagerExample(ApplicationContext context) {
+    public void lazyEagerExample() {
         Loader loader = context.getBean(Loader.class);
         loader.load();
     }
 
-    static void cascadeExample(ApplicationContext context) {
+    public void cascadeExample() {
         Loader loader = context.getBean(Loader.class);
-//        loader.persist();
+        loader.persist();
 //        loader.delete(7);
     }
 
-    static void mapperExample(ApplicationContext context) {
+    public void mapperExample() {
         Employee employee = Employee.builder()
                 .id(1)
                 .email("email@email.com")
@@ -99,32 +85,32 @@ public class StaffManagementApplication {
 
     }
 
-    static void nativeQueryExample(ApplicationContext context) {
+    public void nativeQueryExample() {
         StaffRepository staffRepository = context.getBean(StaffRepository.class);
         Staff staff = staffRepository.findStaffByEmailNativeQuery("hyusieunhan@gmail.com");
         log.info("Staff: {}", staff.getEmail() + " " + staff.getFirstName());
     }
 
-    static void JPQLExample(ApplicationContext context) {
+    public void JPQLExample() {
         StaffRepository staffRepository = context.getBean(StaffRepository.class);
         // get milisecond
         Staff staff = staffRepository.findStaffByEmailJPQL("hyusieunhan@gmail.com");
         log.info("Staff: {}", staff.getEmail() + " " + staff.getFirstName());
     }
 
-    static void CustomQueryWithContructorExample(ApplicationContext context) {
+    public void CustomQueryWithContructorExample() {
         StaffRepository staffRepository = context.getBean(StaffRepository.class);
         StaffDto staffDto = staffRepository.findStaffDtoByEmailContructor("hyusieunhan@gmail.com");
         log.info("StaffDto: {}", staffDto);
     }
 
-    static void ProjectionExample(ApplicationContext context) {
+    public void ProjectionExample() {
         StaffRepository staffRepository = context.getBean(StaffRepository.class);
         StaffProjection staffProjection = staffRepository.findStaffProjectionByEmail("hyusieunhan@gmail.com");
         log.info("StaffProjection: {}", staffProjection.getFullname());
     }
 
-    static void JointableExample(ApplicationContext context) {
+    public void JoinTableExample() {
         StaffRepository staffRepository = context.getBean(StaffRepository.class);
         List<StaffCheckinProjection> checkinProjection = staffRepository.findStaffWithoutCheckinOrCheckoutToday();
         // log the list
@@ -132,7 +118,4 @@ public class StaffManagementApplication {
             log.info("Staff: {}", staffCheckinProjection.getEmail());
         });
     }
-
-
-
 }

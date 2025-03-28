@@ -147,7 +147,6 @@ public class CheckinService {
                 .toList();
 
         for (StaffCheckinProjection staffCheckin : staffCheckins) {
-
             if (staffCheckin.getCheckinId() == null || staffCheckin.getCheckinTime() == null) {
                 emailService.sendEmail(staffCheckin.getEmail(), "Forget Checkin"
                                 + LocalDate.now().format(DateTimeFormatter.ofPattern("MMMM dd, yyyy")),

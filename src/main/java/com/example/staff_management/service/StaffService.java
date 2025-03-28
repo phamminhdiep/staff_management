@@ -10,9 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +45,7 @@ public class StaffService {
         return staffRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Staff not found"));
     }
 
-    @Transactional
+//    @Transactional
     public StaffDto addStaff(StaffDto staffDto) throws MessagingException {
         Staff staff = convertToEntity(staffDto);
         // generate random and numeric checkin code
@@ -123,6 +121,20 @@ public class StaffService {
                 .stream()
                 .map(this::convertToDto)
                 .toList();
+    }
+
+    public Page<StaffDto> searchStaffByName(String keyword, int page, int size, String sortBy) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+
+        Page<Staff> staffPage = staffRepository.getByFirstNameContainingOrLastNameContaining(keyword, keyword, pageable);
+
+        return staffPage.map(this::convertToDto);
+    }
+
+    public Slice<StaffDto> searchStaffByNameSlice(String keyword, int page, int size, String sortBy) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Slice<Staff> staffSlice = staffRepository.findByFirstNameContainingOrLastNameContainingSlice(keyword, pageable);
+        return staffSlice.map(this::convertToDto);
     }
 
     public StaffDto convertToDto(Staff staff) {

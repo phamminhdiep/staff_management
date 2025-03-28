@@ -1,12 +1,15 @@
 package com.example.staff_management.controller;
 
 import com.example.staff_management.dto.StaffDto;
+import com.example.staff_management.entities.Staff;
 import com.example.staff_management.service.CheckinService;
 import com.example.staff_management.service.StaffService;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,7 +20,6 @@ import java.time.temporal.TemporalAdjusters;
 
 @RestController
 @RequestMapping("/api/v1/staff")
-@CrossOrigin(origins = "http://localhost:4200")
 public class StaffController {
     private final StaffService staffService;
     private final CheckinService checkinService;
@@ -66,7 +68,33 @@ public class StaffController {
 
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'STAFF')")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/search")
+    public ResponseEntity<Page<StaffDto>> searchStaffByName(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "firstName") String sortBy) {
+
+        Page<StaffDto> staffPage = staffService.searchStaffByName(keyword, page, size, sortBy);
+        return ResponseEntity.ok(staffPage);
+    }
+
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/search-slice")
+    public ResponseEntity<Slice<StaffDto>> searchStaffByNameSlice(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "firstName") String sortBy) {
+
+        Slice<StaffDto> staffDTOs = staffService.searchStaffByNameSlice(keyword, page, size, sortBy);
+        return ResponseEntity.ok(staffDTOs);
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PutMapping("/update-staff")
     public ResponseEntity<?> updateStaff(@RequestBody @Valid StaffDto staffDto) {
         try {
